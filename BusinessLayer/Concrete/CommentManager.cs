@@ -46,5 +46,10 @@ namespace BusinessLayer.Concrete
         {
             return _commentDal.GetListByFilter(x=>x.DestinationId==id);
         }
+
+        public List<Comment> TGetListCommentWithDestination()
+        {
+            return _commentDal.GetListCommentWithDestination();
+        }
     }
 }

@@ -15,11 +15,18 @@ namespace TraversalCoreProject.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogInformation("Index sayafası çağrıldı");
             return View();
         }
 
         public IActionResult Privacy()
         {
+            _logger.LogInformation("Privacy sayfası çağrıldı");
+            return View();
+        }
+        public IActionResult Test()
+        {
+            _logger.LogInformation("Test Sayfası çağrıldı");
             return View();
         }
 
