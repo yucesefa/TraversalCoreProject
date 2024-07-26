@@ -1,5 +1,7 @@
-﻿using ClosedXML.Excel;
+﻿using BusinessLayer.Abstract;
+using ClosedXML.Excel;
 using DataAccessLayer.Concrete;
+using iTextSharp.text.rtf.parser.destinations;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using TraversalCoreProject.Areas.Admin.Models;
@@ -9,6 +11,13 @@ namespace TraversalCoreProject.Areas.Admin.Controllers
     [Area("Admin")]
     public class ExcelController : Controller
     {
+        private readonly IExcelService _excelService;
+
+        public ExcelController(IExcelService excelService)
+        {
+            _excelService = excelService;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -30,23 +39,7 @@ namespace TraversalCoreProject.Areas.Admin.Controllers
         }
         public IActionResult StaticExcelReport()
         {
-
-            ExcelPackage excelPackage = new ExcelPackage();
-            var workSheet = excelPackage.Workbook.Worksheets.Add("Sayfa1");
-            workSheet.Cells[1, 1].Value = "Rota";
-            workSheet.Cells[1, 2].Value = "Rehber";
-            workSheet.Cells[1, 3].Value = "Kontenjan";
-
-            workSheet.Cells[2, 1].Value = "Gürcistan Batum Turu";
-            workSheet.Cells[2, 2].Value = "Kadir Yılıdz";
-            workSheet.Cells[2, 3].Value = "50";
-
-            workSheet.Cells[3, 1].Value = "Sırbistan - Makedonya Turu";
-            workSheet.Cells[3, 2].Value = "Zeynep Öztürk";
-            workSheet.Cells[3, 3].Value = "35";
-
-            var bytes = excelPackage.GetAsByteArray();
-            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "dosya.xlsx");
+            return File(_excelService.ExcelList (DestinationList()), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Yenidosya.xlsx");
         }
         public IActionResult DestinationExcelReport()
         {

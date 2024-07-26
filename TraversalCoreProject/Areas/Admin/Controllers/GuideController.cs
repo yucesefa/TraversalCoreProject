@@ -65,26 +65,26 @@ namespace TraversalCoreProject.Areas.Admin.Controllers
             _guideService.TUpdate(guide);
             return RedirectToAction("Index");
         }
-        //[Route("ChangeToTrue/{id}")]
-        //public IActionResult ChangeToTrue(int id)
-        //{
-        //    _guideService.TChangeToTrueByGuide(id);
-        //    return RedirectToAction("Index", "Guide", new { area = "Admin" });
-        //}
+        [Route("ChangeToTrue/{id}")]
+        public IActionResult ChangeToTrue(int id)
+        {
+            _guideService.TChangeToTrueByGuide(id);
+            return RedirectToAction("Index", "Guide", new { area = "Admin" });
+        }
 
-        //[Route("ChangeToFalse/{id}")]
-        //public IActionResult ChangeToFalse(int id)
-        //{
-        //    _guideService.TChangeToFalseByGuide(id);
-        //    return RedirectToAction("Index", "Guide", new { area = "Admin" });
-        //}
+        [Route("ChangeToFalse/{id}")]
+        public IActionResult ChangeToFalse(int id)
+        {
+            _guideService.TChangeToFalseByGuide(id);
+            return RedirectToAction("Index", "Guide", new { area = "Admin" });
+        }
 
-        //[Route("DeleteGuide/{id}")]
-        //public IActionResult DeleteGuide(int id)
-        //{
-        //    var values = _guideService.TGetByID(id);
-        //    _guideService.TDelete(values);
-        //    return RedirectToAction("Index", "Guide", new { area = "Admin" });
-        //}
+        [Route("DeleteGuide/{id}")]
+        public IActionResult DeleteGuide(int id)
+        {
+            var values = _guideService.TGetById(id);
+            _guideService.TDelete(values);
+            return RedirectToAction("Index", "Guide", new { area = "Admin" });
+        }
     }
 }
