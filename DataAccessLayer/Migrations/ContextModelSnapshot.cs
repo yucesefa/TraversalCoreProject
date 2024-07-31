@@ -240,6 +240,9 @@ namespace DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommnetId"), 1L, 1);
 
+                    b.Property<int>("AppUserId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CommentContent")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -250,14 +253,15 @@ namespace DataAccessLayer.Migrations
                     b.Property<bool>("CommentStatus")
                         .HasColumnType("bit");
 
-                    b.Property<int>("DestinationId")
+                    b.Property<int?>("DestinationId")
                         .HasColumnType("int");
 
                     b.Property<string>("NameSurname")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CommnetId");
+
+                    b.HasIndex("AppUserId");
 
                     b.HasIndex("DestinationId");
 
@@ -353,6 +357,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("CoverImage")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("DayNight")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -365,6 +372,9 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<string>("Detail2")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("GuideId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
@@ -379,6 +389,8 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("DestinationId");
+
+                    b.HasIndex("GuideId");
 
                     b.ToTable("Destinations");
                 });
@@ -448,6 +460,10 @@ namespace DataAccessLayer.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GuideId"), 1L, 1);
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description2")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -680,13 +696,28 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("EntityLayer.Concrete.Comment", b =>
                 {
-                    b.HasOne("EntityLayer.Concrete.Destination", "Destination")
+                    b.HasOne("EntityLayer.Concrete.AppUser", "AppUser")
                         .WithMany("Comments")
-                        .HasForeignKey("DestinationId")
+                        .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EntityLayer.Concrete.Destination", "Destination")
+                        .WithMany("Comments")
+                        .HasForeignKey("DestinationId");
+
+                    b.Navigation("AppUser");
+
                     b.Navigation("Destination");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concrete.Destination", b =>
+                {
+                    b.HasOne("EntityLayer.Concrete.Guide", "Guide")
+                        .WithMany("Destinations")
+                        .HasForeignKey("GuideId");
+
+                    b.Navigation("Guide");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Reservation", b =>
@@ -761,6 +792,8 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("EntityLayer.Concrete.AppUser", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Reservations");
                 });
 
@@ -769,6 +802,11 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("Reservations");
+                });
+
+            modelBuilder.Entity("EntityLayer.Concrete.Guide", b =>
+                {
+                    b.Navigation("Destinations");
                 });
 #pragma warning restore 612, 618
         }
